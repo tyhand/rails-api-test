@@ -1,24 +1,47 @@
-# README
+# Rails API Test
+A simple rails api setup to test some stuff
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Adding a user
+```bash
+curl -i -H "Accept: application/vnd.api+json" -H 'Content-Type:application/vnd.api+json' -X POST -d '{"data": {"type":"users", "attributes":{"username":"Godzilla"}}}' http://localhost:3000/users
+```
+JSON
+```json
 
-Things you may want to cover:
+```
 
-* Ruby version
+## Adding a follower
+```bash
+curl -i -H "Accept: application/vnd.api+json" -H 'Content-Type:application/vnd.api+json' -X POST -d '{"data": {"type":"follows","relationships": {"following": {"data": {"type": "users", "id": 1}},"follower": {"data": {"type": "users","id": 3}}}}}' http://localhost:3000/follows
+```
+JSON
+```json
+{
+  "data": {
+    "type":"follows",
+    "relationships": {
+      "following": {
+        "data": {
+          "type": "users",
+          "id": 1
+        }
+      },
+      "follower": {
+        "data": {
+          "type": "users",
+          "id": 3
+       	}
+      }
+    }
+  }
+}
+```
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## Getting followers
+```bash
+curl -i -H -X GET http://localhost:3000/users/1/followers
+```
+## Getting following
+```bash
+curl -i -H -X GET http://localhost:3000/users/1/following
+```
