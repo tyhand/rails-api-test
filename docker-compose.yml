@@ -1,0 +1,22 @@
+version: '2'
+services:
+  db:
+    image: postgres
+  web:
+    build: .
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    volumes:
+      - .:/myapp
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+  pgweb:
+    image: sosedoff/pgweb
+    ports:
+      - "3081:3081"
+    command: "/usr/bin/pgweb --bind=0.0.0.0 --listen=3081 --ssl disable"
+    links:
+      - db
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/myapp_development
